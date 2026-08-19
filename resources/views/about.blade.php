@@ -1,16 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About</title>
-</head>
-<body>
+<x-layout>
     <h1>About Us!</h1>
 
     <div>
         <a href="/">Return home</a>
     </div>
-
-</body>
-</html>
+</x-layout>
