@@ -29,6 +29,7 @@
         <a href="/contact">Contact us</a>
     </nav>
 
+{{--   @slot  Components can have unique HTML, and for this we use the @slot atribute. --}}
     <main>
         {{ $slot }}
     </main>
