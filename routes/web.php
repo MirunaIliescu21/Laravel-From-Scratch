@@ -1,41 +1,73 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Models\Idea;
 
-Route::get('/', function () {
-    // $ideas = DB::table('ideas')->get();
-    // $ideas = Idea::where('state', 'pending')->get();
 
+// index action
+Route::get('/ideas', function () {
+
+    $ideas = Idea::all();
+
+    /**  // Eloquent - elocvent queries
     $ideas = Idea::query()
         ->when(request('state'), function ($query, $state) {
             // Query where the query state is equal to what is specified within the query
             $query->where('state', $state);
         })
     ->get();
+     */
 
-    // Pass our $ideas into the view 'ideas' => $ideas
-    return view('ideas', [
+    // Pass our $ideas into the view 'ideas/index' => $ideas
+    return view('ideas/index', [
         'ideas' => $ideas
     ]);
 });
 
-Route::post('/ideas', function () {
-    $idea = request('idea');
 
+// show action
+Route::get('/ideas/{idea}', function (Idea $idea) {
+
+    // Pass our $idea into the view 'ideas/show' => $idea
+    return view('ideas/show', [
+        'idea' => $idea
+    ]);
+});
+
+// edit action
+Route::get('/ideas/{idea}/edit', function (Idea $idea) {
+    // Pass our $idea into the view 'ideas/edit' => $idea
+    return view('ideas/edit', [
+        'idea' => $idea
+    ]);
+});
+
+// update action
+Route::patch('/ideas/{idea}', function (Idea $idea) {
+    $idea->update([
+        'description' => request('description')
+    ]);
+
+    // redirect to the show page of the edited idea
+    return redirect('/ideas/'.$idea->id);
+});
+
+
+// store action
+Route::post('/ideas', function () {
     Idea::create([
-        'description' => $idea,
+        'description' => request('description'),
         'state' => 'pending'
     ]);
 
-    return redirect('/');
+    return redirect('/ideas');
 });
 
-// Temporary
-Route::get('/delete-ideas', function () {
-    session()->forget('ideas');
-    return redirect('/');
+// destroy action
+Route::delete('/ideas/{idea}', function (Idea $idea) {
+    $idea->delete();
+
+    return redirect('/ideas');
 });
 
 Route::view('/about', 'about');
