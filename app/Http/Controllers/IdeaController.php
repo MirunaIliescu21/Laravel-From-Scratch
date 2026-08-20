@@ -34,6 +34,14 @@ class IdeaController extends Controller
      */
     public function store(Request $request)
     {
+        /*
+        Validation of null input.
+        Laravel will handle the process of automatically redirecting back to the form.
+         */
+        $request->validate([
+            'description' => ['required', 'min:10'],
+        ]);
+
         Idea::create([
             'description' => request('description'),
             'state' => 'pending'
