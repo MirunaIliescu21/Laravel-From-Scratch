@@ -14,9 +14,9 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        $ideas = Idea::query()->where([
-            'user_id' => Auth::id(),
-        ])->get();
+//        $ideas = Idea::query()->where([
+//            'user_id' => Auth::id(),
+//        ])->get();
 
         /**
          * This make the same thing as the previous query
@@ -53,13 +53,14 @@ class IdeaController extends Controller
 //            'description' => ['required', 'min:10'],
 //        ]);
 
-        Idea::create([
+        Auth::user()->ideas()->create([
             'description' => request('description'),
             'state' => 'pending',
-            'user_id' =>Auth::id(), // grab the ID of the current authenticated user
+//            'user_id' => Auth::id(), // grab the ID of the current authenticated user
                                     // Auth::user() grab the instance of the user !!dif
         ]);
 
+        
         return redirect('/ideas');
     }
 
