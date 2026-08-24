@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterUserController;
+use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\IdeaController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,5 +19,9 @@ Route::patch('/ideas/{idea}', [IdeaController::class, 'update']);
 
 Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy']);
 
-Route::view('/about', 'about');
-Route::view('/contact', 'contact');
+Route::get('/register', [RegisterUserController::class, 'create']); // create a new session for register
+Route::post('/register', [RegisterUserController::class, 'store']);
+
+Route::get('/login', [SessionController::class, 'create']); // create a new session for login
+Route::post('/login', [SessionController::class, 'store']);
+Route::delete('logout', [SessionController::class, 'destroy']);
