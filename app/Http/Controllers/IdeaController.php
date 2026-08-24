@@ -60,7 +60,7 @@ class IdeaController extends Controller
                                     // Auth::user() grab the instance of the user !!dif
         ]);
 
-        
+
         return redirect('/ideas');
     }
 

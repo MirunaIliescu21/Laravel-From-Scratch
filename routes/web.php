@@ -38,3 +38,7 @@ Route::middleware('guest')->group(function () {
 });
 
 
+Route::get('/admin', function () {
+    Gate::authorize('view-admin');
+    return 'Private admin only area.';
+});
