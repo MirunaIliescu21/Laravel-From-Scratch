@@ -5,23 +5,36 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\IdeaController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/ideas', [IdeaController::class, 'index']);
+Route::get('/', function () {
+    return 'Placeholder for home page.';
+});
 
-Route::get('/ideas/create', [IdeaController::class, 'create']);
+// For all these routes we need to be authenticated -> middleware('auth")
+Route::middleware('auth')->group(function () {
+    Route::get('/ideas', [IdeaController::class, 'index']);
 
-Route::post('/ideas', [IdeaController::class, 'store']);
+    Route::get('/ideas/create', [IdeaController::class, 'create']);
 
-Route::get('/ideas/{idea}', [IdeaController::class, 'show']);
+    Route::post('/ideas', [IdeaController::class, 'store']);
 
-Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit']);
+    Route::get('/ideas/{idea}', [IdeaController::class, 'show']);
 
-Route::patch('/ideas/{idea}', [IdeaController::class, 'update']);
+    Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit']);
 
-Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy']);
+    Route::patch('/ideas/{idea}', [IdeaController::class, 'update']);
 
-Route::get('/register', [RegisterUserController::class, 'create']); // create a new session for register
-Route::post('/register', [RegisterUserController::class, 'store']);
+    Route::delete('/ideas/{idea}', [IdeaController::class, 'destroy']);
 
-Route::get('/login', [SessionController::class, 'create']); // create a new session for login
-Route::post('/login', [SessionController::class, 'store']);
-Route::delete('logout', [SessionController::class, 'destroy']);
+    Route::delete('logout', [SessionController::class, 'destroy']);
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterUserController::class, 'create'])->middleware('guest'); // create a new session for register
+    Route::post('/register', [RegisterUserController::class, 'store'])->middleware('guest');
+
+    Route::get('/login', [SessionController::class, 'create'])->name("login"); // create a new session for login
+    // we named the route for Laravel to know where to redirect in case of middleware
+    Route::post('/login', [SessionController::class, 'store']);
+});
+
+

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\IdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class IdeaController extends Controller
 {
@@ -13,7 +14,14 @@ class IdeaController extends Controller
      */
     public function index()
     {
-        $ideas = Idea::all();
+        $ideas = Idea::query()->where([
+            'user_id' => Auth::id(),
+        ])->get();
+
+        /**
+         * This make the same thing as the previous query
+         */
+        $ideas = Auth::user()->ideas;
 
         // Pass our $ideas into the view 'ideas/index' => $ideas
         return view('ideas/index', [
@@ -47,7 +55,9 @@ class IdeaController extends Controller
 
         Idea::create([
             'description' => request('description'),
-            'state' => 'pending'
+            'state' => 'pending',
+            'user_id' =>Auth::id(), // grab the ID of the current authenticated user
+                                    // Auth::user() grab the instance of the user !!dif
         ]);
 
         return redirect('/ideas');
