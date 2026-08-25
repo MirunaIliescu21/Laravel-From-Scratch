@@ -6,6 +6,7 @@ use App\Http\Requests\IdeaRequest;
 use App\Models\Idea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class IdeaController extends Controller
 {
@@ -14,12 +15,9 @@ class IdeaController extends Controller
      */
     public function index()
     {
-//        $ideas = Idea::query()->where([
-//            'user_id' => Auth::id(),
-//        ])->get();
-
         /**
          * This make the same thing as the previous query
+         * $ideas = Idea::query()->where([ 'user_id' => Auth::id() ])->get();
          */
         $ideas = Auth::user()->ideas;
 
@@ -34,6 +32,9 @@ class IdeaController extends Controller
      */
     public function create()
     {
+        // Laravel thinks: I need to figure out the corresponding policy for Idea and then call 'create' on it.
+        // Gate::authorize('create', Idea::class);
+
         // Pass our $idea into the view 'ideas/create'
         return view('ideas/create');
     }
@@ -69,6 +70,16 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
+        // Let's authorize an update (the policy name) for $idea - it finds dynamically the policy
+        Gate::authorize('update', $idea);
+
+        /** ALTERNATIV
+         * If the authed user cannot update the idea
+                if(Auth::user()->cannot('update', $idea)) {
+                    dd('not authorized');
+                }
+         * */
+
         return view('ideas/show', [
             'idea' => $idea
         ]);
@@ -79,6 +90,9 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea)
     {
+        // Let's authorize an update (the policy name) for $idea - it finds dynamically the policy
+        Gate::authorize('update', $idea);
+
         // Pass our $idea into the view 'ideas/edit' => $idea
         return view('ideas/edit', [
             'idea' => $idea
@@ -90,8 +104,15 @@ class IdeaController extends Controller
      */
     public function update(IdeaRequest $request, Idea $idea)
     {
+        // Let's authorize an update (the policy name) for $idea - it finds dynamically the policy
+        Gate::authorize('update', $idea);
+
+        $idea->update([
+            'description' => $request->description,
+        ]);
+
         // redirect to the show page of the edited idea
-        return redirect('/ideas/'.$idea->id);
+        return redirect("/ideas/{$idea->id}");
     }
 
     /**
@@ -99,6 +120,9 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
+        // Let's authorize an update (the policy name) for $idea - it finds dynamically the policy
+        Gate::authorize('update', $idea);
+
         $idea->delete();
         return redirect('/ideas');
     }

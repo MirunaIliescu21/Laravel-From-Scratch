@@ -22,13 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('view-admin', function(User $user) {
-
-            // the user with id of 1 is the admin
-            if ($user->id === 1) {
-                return Response::allow();
-            }
-            return Response::denyWithStatus(404);
-        });
+        //
     }
 }

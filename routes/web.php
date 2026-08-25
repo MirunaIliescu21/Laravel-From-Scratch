@@ -36,9 +36,3 @@ Route::middleware('guest')->group(function () {
     // we named the route for Laravel to know where to redirect in case of middleware
     Route::post('/login', [SessionController::class, 'store']);
 });
-
-
-Route::get('/admin', function () {
-    Gate::authorize('view-admin');
-    return 'Private admin only area.';
-});
