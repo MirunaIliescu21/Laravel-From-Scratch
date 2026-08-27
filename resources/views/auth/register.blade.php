@@ -16,7 +16,7 @@
 
             {{-- When we click this button, where are we going?--}}
             {{-- We're ging to make a post request to this /register endpoint -> form action ... --}}
-            <button class="btn btn-neutral mt-4">Register</button>
+            <button class="btn btn-neutral mt-4" data-test="register-button">Register</button>
         </fieldset>
     </form>
 </x-layout>

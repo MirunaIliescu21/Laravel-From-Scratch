@@ -6,7 +6,7 @@ use App\Http\Controllers\IdeaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return 'Placeholder for home page.';
+    return 'Welcome to the home page.';
 });
 
 // For all these routes we need to be authenticated -> middleware('auth")

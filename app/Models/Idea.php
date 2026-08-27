@@ -9,6 +9,10 @@ class Idea extends Model
 {
     protected $guarded = [];
 
+    protected $attributes = [
+        'state' =>'pending',
+    ];
+
     /**
      * if we call user on $idea ($idea->user) it gives us the object of the user who created it.
      * @return BelongsTo
