@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\IdeaRequest;
 use App\Models\Idea;
+use App\Notifications\IdeaPublished;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -44,23 +45,13 @@ class IdeaController extends Controller
      */
     public function store(IdeaRequest $request)
     {
-        /*
-        Validation of null input.
-        Laravel will handle the process of automatically redirecting back to the form.
-         */
-
-        // Instead of this, we create an IdeaRequest file that provides all  the rules for validating a request.
-//        $request->validate([
-//            'description' => ['required', 'min:10'],
-//        ]);
-
-        Auth::user()->ideas()->create([
+        $idea = Auth::user()->ideas()->create([
             'description' => request('description'),
             'state' => 'pending',
-//            'user_id' => Auth::id(), // grab the ID of the current authenticated user
-                                    // Auth::user() grab the instance of the user !!dif
         ]);
 
+        // notify the user
+        Auth::user()->notify(new IdeaPublished($idea));
 
         return redirect('/ideas');
     }
