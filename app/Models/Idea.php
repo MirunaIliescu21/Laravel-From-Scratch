@@ -9,6 +9,7 @@ class Idea extends Model
 {
     protected $guarded = [];
 
+    // Initial attribute for 'state'
     protected $attributes = [
         'state' =>'pending',
     ];
